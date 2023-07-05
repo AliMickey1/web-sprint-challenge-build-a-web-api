@@ -18,9 +18,7 @@ const Action = require('./actions-model')
         }
     }
     catch(err) {
-        res.status(500).json({
-            message: "Missing required information",
-        })
+      console.log(err)
     }
 }
 

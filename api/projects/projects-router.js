@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 const projects = require('./projects-model')
-const { verifyMoreInfo, verifyInfo, requiredBody, valId } = require('./projects-middleware')
+const { verifyInfo, valId, allValid } = require('./projects-middleware')
 
 router.get('/', (req, res) => {
     
@@ -38,10 +38,11 @@ router.post('/', verifyInfo, (req, res) => {
 
  })
 
-router.put('/:id', valId, verifyInfo, async (req, res) => {
-    try {
+router.put('/:id', valId, allValid, async (req, res) => {
+
         const updatedProject = await projects.update(req.params.id, req.body)
-        res.status(200).json(updatedProject)
+    try {
+        res.status(201).json(updatedProject)
     }
    catch(err){ 
         console.log(err)
@@ -59,9 +60,6 @@ router.delete('/:id', valId, (req, res) => {
     })
     .catch(err => {
         console.log(err)
-        res.status(500).json({
-            message: 'Error'
-        })
     })
     
 })
@@ -72,7 +70,7 @@ router.get('/:id/actions', valId, (req, res) => {
         res.status(200).json(action)
     })
     .catch(err => {
-        res.status(500).json('[]')
+        res.send('[]')
     })
 })
 
